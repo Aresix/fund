@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc6d3b92-e069-4a7e-8f1d-bfcfcba49ebb" name="Changes" comment="">
+    <list default="true" id="cc6d3b92-e069-4a7e-8f1d-bfcfcba49ebb" name="Changes" comment="Add some entity class">
       <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
@@ -272,8 +272,16 @@
       <workItem from="1642590693310" duration="345000" />
       <workItem from="1642591054952" duration="241000" />
       <workItem from="1642591315401" duration="3563000" />
-      <workItem from="1642741074934" duration="10291000" />
+      <workItem from="1642741074934" duration="10870000" />
     </task>
+    <task id="LOCAL-00001" summary="Add some entity class">
+      <created>1642754798571</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1642754798571</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -289,6 +297,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add some entity class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add some entity class" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
