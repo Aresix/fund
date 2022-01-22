@@ -5,11 +5,11 @@ import com.fundMonitor.constants.TaskStatus;
 import com.fundMonitor.constants.TaskType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * @author Aresix
@@ -30,33 +30,49 @@ public class Task extends IEntity{
     @ApiModelProperty(value = "项目名")
     private String projectName;
 
-//    @ApiModelProperty(value = "负责人")
-//    private String principal;
+    @ApiModelProperty(value = "负责人")
+    @OneToMany
+    @Where(clause = "deleted = 0")
+    @JoinColumn(name = "taskId", referencedColumnName = "id", updatable = false, insertable = false)
+    private List<Account> accounts;
 
     @ApiModelProperty(value = "紧急程度")
     @Enumerated(EnumType.STRING)
-    private TaskPriority taskPriority;
+    private TaskPriority taskPriority = TaskPriority.common;
 
     @ApiModelProperty(value = "目标完成时间")
     private Timestamp finTime;
 
     @ApiModelProperty(value = "完成情况")
     @Enumerated(EnumType.STRING)
-    private TaskStatus taskStatus;
+    private TaskStatus taskStatus = TaskStatus.inProcess;
 
     @ApiModelProperty(value = "类型")
     @Enumerated(EnumType.STRING)
     private TaskType taskType;
 
-    @ApiModelProperty(value = "读权限")
-    private int r;
-
-    @ApiModelProperty(value = "写权限")
-    private int w;
-
-    @ApiModelProperty(value = "执行权限")
-    private int x;
+//    @ApiModelProperty(value = "责任人权限")
+//    @Enumerated(EnumType.STRING)
+//    private TaskPer principalPer;
+//
+//    @ApiModelProperty(value = "责任组权限")
+//    @Enumerated(EnumType.STRING)
+//    private TaskPer groupPer;
+//
+//    @ApiModelProperty(value = "其他人权限")
+//    @Enumerated(EnumType.STRING)
+//    private TaskPer OtherPer;
 
     @ApiModelProperty(value = "任务链接")
     private String taskURL;
+
+    @ApiModelProperty(value = "r")
+    private int r;
+
+    @ApiModelProperty(value = "w")
+    private int w;
+
+    @ApiModelProperty(value = "x")
+    private int x;
+
 }

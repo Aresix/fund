@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 public class BaseController {
-    @Value("${fundMonitor.upload.file.path}")
+    @Value("${celebritiesGathering.upload.file.path}")
     String rootPath;
 
     public static final String Integer_MAX_VALUE = "" + Integer.MAX_VALUE;
