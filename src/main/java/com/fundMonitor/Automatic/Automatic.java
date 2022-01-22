@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Automatic {
-    private static final String rootPath = "/Users/lli.chen/IdeaProjects/fundMonitor/backserver/src/main/java/com/fundMonitor";
+    private static final String rootPath = "D:/javasup/fund/fund/src/main/java/com/fundMonitor";
     private static final String rootControllerPath = "/Automatic/rootController.txt";
     private static final String rootServicePath = "/Automatic/rootService.txt";
     private static final String rootRepositoryPath = "/Automatic/rootRepository.txt";
@@ -20,9 +20,9 @@ public class Automatic {
     private static List<ClassDetail> getClassDetails() {
         List<ClassDetail> classDetails = new ArrayList<>();
         ClassDetail classDetail = new ClassDetail();
-        classDetail.setClassName("AssessmentInfo");
-        classDetail.setPathName("assessmentInfo");
-        classDetail.setControllerName("评估信息");
+        classDetail.setClassName("EEGroup");
+        classDetail.setPathName("EEGroup");
+        classDetail.setControllerName("小组");
         classDetails.add(classDetail);
         return classDetails;
     }

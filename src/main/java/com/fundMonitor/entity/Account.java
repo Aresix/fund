@@ -16,6 +16,14 @@ import javax.persistence.*;
 @Data
 public class Account extends IEntity {
 
+    @ApiModelProperty(value = "邮箱")
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @ApiModelProperty(value = "电话")
+    @Column(unique = true, nullable = false)
+    private String phone;
+
     @ApiModelProperty(value = "用户名")
     @Column(unique = true, nullable = false)
     private String loginName;
