@@ -1,5 +1,11 @@
 package com.fundMonitor.controller;
 
+import com.fundMonitor.entity.Account;
+import com.fundMonitor.entity.EEGroupRelation;
+import com.fundMonitor.repository.AccountRepository;
+import com.fundMonitor.repository.EEGroupRelationRepository;
+import com.fundMonitor.service.EEGroupRelationService;
+import com.fundMonitor.service.UserService;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -19,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +42,13 @@ public class EEGroupController extends BaseController {
 
     @Autowired
     private EEGroupRepository eEGroupRepository;
+
+    @Autowired
+    private UserService userService;
+//    @Autowired
+    private EEGroupRelationService eeGroupRelationService;
+//    @Autowired
+    private EEGroupRelationRepository eeGroupRelationRepository;
 
     @PostMapping
     @ApiOperation(value = "新建小组")
@@ -71,6 +85,46 @@ public class EEGroupController extends BaseController {
     @DeleteMapping("/{id}")
     @ApiOperation(value = "根据Id删除小组")
     public BaseResponse delete(@PathVariable Long id) {
+        List<EEGroupRelation> relations = eeGroupRelationService.getGroupRelation(id);
+        // 删除relation table中和与该组有关的所有数据
+        for(EEGroupRelation relation : relations) {
+            Preconditions.checkNotNull(relation);
+            // TODO: 这里的SR怎么处理
+            eeGroupRelationService.delete(relation);
+        }
         return new SuccessResponse<>(eEGroupService.deleteEntity(id));
+    }
+
+    //===================组员======================
+    @GetMapping("/{id}/member_list")
+    @ApiOperation(value = "根据Id获取组内成员")
+    public BaseResponse getMembers(@PathVariable Long id){
+        List<EEGroupRelation> relations = eeGroupRelationRepository.findByGroupID(id);
+        List<Account> accounts = new ArrayList<>();
+        for(EEGroupRelation relation : relations){
+            Account account = userService.getById(relation.getAccountID());
+            accounts.add(account);
+        }
+        return new SuccessResponse<>(accounts);
+    }
+
+    @PutMapping("add_member")
+    @ApiOperation(value = "在组内添加新成员")
+    public BaseResponse addMember(@RequestBody EEGroupRelation relation){
+        EEGroupRelation old = eeGroupRelationRepository.
+                findByAccountIDAndGroupID(relation.getAccountID(), relation.getGroupID());
+        if(old != null){
+            return new BaseResponse<>("用户已在组内");
+        }
+        return new SuccessResponse<>(eeGroupRelationService.saveOrUpdate(relation));
+    }
+
+    @DeleteMapping("/{gid}/{uid}")
+    @ApiOperation(value = "在组内删除成员")
+    public BaseResponse deleteMember(@RequestBody EEGroupRelation relation){
+        EEGroupRelation del = eeGroupRelationRepository.
+                findByAccountIDAndGroupID(relation.getAccountID(), relation.getGroupID());
+        eeGroupRelationService.delete(del);
+        return new SuccessResponse<>();
     }
 }

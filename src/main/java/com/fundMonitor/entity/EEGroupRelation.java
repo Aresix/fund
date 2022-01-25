@@ -15,9 +15,9 @@ import javax.persistence.Entity;
 public class EEGroupRelation extends IEntity {
     @ApiModelProperty(value = "所属分组")
     @Column(nullable = false)
-    private String groupID;
+    private Long groupID;
 
     @ApiModelProperty(value = "组内成员")
     @Column(nullable = false)
-    private String accountID;
+    private Long accountID;
 }

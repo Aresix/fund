@@ -1,9 +1,5 @@
 package com.fundMonitor.Automatic;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.fundMonitor.utils.ExcelUtil;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -53,7 +49,7 @@ public class EnumAutomatic {
         headerMap.put("enumName", "枚举类名");
         headerMap.put("enumDetail", "枚举类内容");
         String fileName = "枚举类";
-        ExcelUtil.exportExcelX(fileName, "枚举类", headerMap, JSONArray.parseArray(JSON.toJSONString(enumDetails)), "yyyy-MM-dd", 17,
-                "/Users/lli.chen/IdeaProjects/fundMonitor/相关文档", null);
+//        ExcelUtil.exportExcelX(fileName, "枚举类", headerMap, JSONArray.parseArray(JSON.toJSONString(enumDetails)), "yyyy-MM-dd", 17,
+//                "/Users/lli.chen/IdeaProjects/fundMonitor/相关文档", null);
     }
 }
