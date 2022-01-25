@@ -1,8 +1,12 @@
 package com.fundMonitor.controller;
 
+import com.fundMonitor.entity.Account;
+import com.fundMonitor.entity.EETask;
+import com.fundMonitor.repository.AccountRepository;
+import com.fundMonitor.repository.EETaskRepository;
+import com.fundMonitor.response.ErrorResponse;
+import com.fundMonitor.service.EETaskService;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.fundMonitor.entity.Task;
 import com.fundMonitor.repository.TaskRepository;
 import com.fundMonitor.request.OrderRequest;
@@ -15,13 +19,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  * @author lli.chen
@@ -35,6 +37,10 @@ public class TaskController extends BaseController {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    private EETaskService eeTaskService;
+    private EETaskRepository eeTaskRepository;
+    private AccountRepository accountRepository;
 
     @PostMapping
     @ApiOperation(value = "新建任务")
@@ -76,5 +82,36 @@ public class TaskController extends BaseController {
     @ApiOperation(value = "根据Id删除任务")
     public BaseResponse delete(@PathVariable Long id) {
         return new SuccessResponse<>(taskService.deleteEntity(id));
+    }
+
+    //===================责任人====================
+    @GetMapping("/{id}/in_charge")
+    @ApiOperation(value = "根据id获取该task的责任人")
+    public BaseResponse getInChargeList(@PathVariable Long id){
+        List<EETask> eeTasks = eeTaskService.getAllPersonInCharge(id);
+        List<Optional<Account>> accounts = new ArrayList<>();
+        for(EETask task : eeTasks){
+            accounts.add(accountRepository.findById(task.getTaskPersonInChargeID()));
+        }
+        return new BaseResponse<>(accounts);
+    }
+
+    @PutMapping("assign")
+    @ApiOperation(value = "分配责任人")
+    public BaseResponse assign(@RequestBody EETask eeTask){
+        Preconditions.checkNotNull(eeTask.getTaskPersonInChargeID(),"未选中任何人");
+        EETask task = eeTaskRepository.
+                findByTaskIDAndTaskPersonInChargeID(eeTask.getTaskPersonInChargeID(), eeTask.getTaskID());
+        if (task != null) return new ErrorResponse("任务已分配");
+        return new SuccessResponse<>(eeTaskService.saveOrUpdate(eeTask));
+    }
+
+    @DeleteMapping
+    @ApiOperation(value = "删除责任人")
+    public BaseResponse deleteOnePIC(@RequestBody EETask eeTask){
+        if (eeTaskRepository.countByTaskID(eeTask.getTaskID())==1)
+            return new ErrorResponse("每个任务至少得有一位负责人");
+        eeTaskService.deleteEntity(eeTask.getId());
+        return new SuccessResponse<>();
     }
 }

@@ -2,7 +2,11 @@ package com.fundMonitor.controller;
 
 import com.fundMonitor.constants.RoleType;
 import com.fundMonitor.entity.Account;
+import com.fundMonitor.entity.EEGroup;
+import com.fundMonitor.entity.EEGroupRelation;
 import com.fundMonitor.repository.AccountRepository;
+import com.fundMonitor.repository.EEGroupRelationRepository;
+import com.fundMonitor.repository.EEGroupRepository;
 import com.fundMonitor.request.LoginRequest;
 import com.fundMonitor.request.OrderRequest;
 import com.fundMonitor.response.BaseResponse;
@@ -20,7 +24,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author lli.chen
@@ -34,6 +40,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    private EEGroupRelationRepository eeGroupRelationRepository;
+    private EEGroupRepository eeGroupRepository;
 
     /**
      * 登陆？
@@ -128,5 +137,17 @@ public class UserController extends BaseController {
     public BaseResponse deleteOne(@PathVariable Long id) {
         userService.deleteEntity(id);
         return new SuccessResponse<>();
+    }
+
+    @GetMapping("/{id}/all_groups")
+    @ApiOperation(value = "用户所在的组")
+    public BaseResponse getGroups(@PathVariable Long id) {
+        List<EEGroupRelation> relations = eeGroupRelationRepository.findByAccountID(id);
+        List<Optional<EEGroup>> groups = new ArrayList<>();
+        for(EEGroupRelation relation : relations){
+            Optional<EEGroup> group = eeGroupRepository.findById(relation.getGroupID());
+            groups.add(group);
+        }
+        return new SuccessResponse<>(groups);
     }
 }

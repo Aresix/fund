@@ -13,4 +13,5 @@ import java.util.List;
 public interface EEGroupRelationRepository extends PagingAndSortingRepository<EEGroupRelation, Long> {
     List<EEGroupRelation> findByGroupID(Long groupID);
     EEGroupRelation findByAccountIDAndGroupID(Long uid, Long gid);
+    List<EEGroupRelation> findByAccountID(Long uid);
 }

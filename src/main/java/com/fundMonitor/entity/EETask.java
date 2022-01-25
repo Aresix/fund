@@ -15,10 +15,10 @@ import javax.persistence.Entity;
 public class EETask extends IEntity{
     @ApiModelProperty(value = "任务编号")
     @Column(nullable = false)
-    private String taskID;
+    private Long taskID;
 
     @ApiModelProperty(value = "责任人")
     @Column(nullable = false)
-    private String taskPersonInCharge;
+    private Long taskPersonInChargeID;
 
 }

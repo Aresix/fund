@@ -4,22 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf69de64-f374-4a78-8a79-26cb321b0e1b" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/repository/EEGroupRelationRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/service/EEGroupRelationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+    <list default="true" id="bf69de64-f374-4a78-8a79-26cb321b0e1b" name="Default" comment="实现了member in group的接口">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/repository/EETaskRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/service/EETaskService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/Automatic/EnumAutomatic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/Automatic/EnumAutomatic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/controller/EEGroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/controller/EEGroupController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/entity/EEGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/entity/EEGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/entity/EEGroupRelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/entity/EEGroupRelation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/entity/Group.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/utils/ExcelUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/fundMonitor/Automatic/Automatic.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/fundMonitor/Automatic/Automatic.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/fundMonitor/constants/RoleType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/fundMonitor/constants/RoleType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/fundMonitor/entity/Account.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/fundMonitor/entity/Account.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/fundMonitor/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/fundMonitor/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/controller/TaskController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/controller/TaskController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/entity/EETask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/entity/EETask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fundMonitor/repository/EEGroupRelationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fundMonitor/repository/EEGroupRelationRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -338,8 +330,16 @@
       <workItem from="1642776991036" duration="41000" />
       <workItem from="1642822168631" duration="1315000" />
       <workItem from="1643080653225" duration="10621000" />
-      <workItem from="1643096652082" duration="2584000" />
+      <workItem from="1643096652082" duration="8570000" />
     </task>
+    <task id="LOCAL-00001" summary="实现了member in group的接口">
+      <created>1643099597986</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1643099597986</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -393,6 +393,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="实现了member in group的接口" />
+    <option name="LAST_COMMIT_MESSAGE" value="实现了member in group的接口" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/java/com/fundMonitor/Automatic/Automatic.java">
