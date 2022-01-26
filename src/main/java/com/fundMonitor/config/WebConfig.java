@@ -34,6 +34,9 @@ public class WebConfig extends SpringDataWebConfiguration {
         registry.addResourceHandler("/portal/**")
                 .addResourceLocations("classpath:/static/portal/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS));
+
+        //registry.addResourceHandler("swagger-ui.html").addResourceLocations(
+          //      "classpath:/META-INF/resources/");
     }
 
     @Override
@@ -47,4 +50,6 @@ public class WebConfig extends SpringDataWebConfiguration {
     public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(new AccessInterceptor()).addPathPatterns("/api/**");
     }
+
+
 }

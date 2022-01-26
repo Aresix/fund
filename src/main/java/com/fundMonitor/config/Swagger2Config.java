@@ -34,11 +34,11 @@ public class Swagger2Config {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("中医九种体质接口")
+                .title("基金项目接口")
                 .description("1、第一步需要访问用户接口中的login 先登陆一下 否则会报 Full authentication is required to access this resource 错误\n" +
                         "2、新建时Id不要传！！！不要传！！！\n" +
                         "3、新建更新时有些字段可忽略，请参照 Model 中的注释\n" +
-                        "4、文件获取地址 ： http://47.101.68.214:8090/resources/1574583200108/26.png")
+                        "4、文件获取地址 ： http://47.101.68.214:8515/resources/1574583200108/26.png")
                 .build();
     }
 }
