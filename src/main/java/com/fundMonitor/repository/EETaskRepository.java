@@ -12,8 +12,8 @@ import java.util.List;
 public interface EETaskRepository extends PagingAndSortingRepository<EETask, Long> {
     List<EETask> findByDeleted(boolean deleted);
     List<EETask> findByDeleted(boolean deleted, Sort sort);
-    List<EETask> findByTaskID(Long taskID);
-    List<EETask> findByTaskPersonInChargeID(Long uid);
-    EETask findByTaskIDAndTaskPersonInChargeID(Long uid, Long tid);
-    Long countByTaskID(Long tid);
+    List<EETask> findByTaskIDAndDeleted(Long taskID,boolean deleted);
+    List<EETask> findByTaskPersonInChargeIDAndDeleted(Long uid,boolean deleted);
+    EETask findByTaskIDAndTaskPersonInChargeIDAndDeleted(Long uid, Long tid, boolean deleted);
+    Long countByTaskIDAndDeleted(Long tid,boolean deleted);
 }

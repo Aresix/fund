@@ -14,11 +14,11 @@ import javax.persistence.Entity;
 @Data
 public class EETask extends IEntity{
     @ApiModelProperty(value = "任务编号")
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Long taskID;
 
     @ApiModelProperty(value = "责任人")
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Long taskPersonInChargeID;
 
 }

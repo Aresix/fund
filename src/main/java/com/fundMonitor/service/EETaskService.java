@@ -30,6 +30,6 @@ public class EETaskService extends BasicService<EETask, Long> {
     }
 
     public List<EETask> getAllPersonInCharge(Long tid){
-        return eETaskRepository.findByTaskID(tid);
+        return eETaskRepository.findByTaskIDAndDeleted(tid, false);
     }
 }

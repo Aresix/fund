@@ -13,7 +13,8 @@ public interface EEGroupRelationRepository extends PagingAndSortingRepository<EE
     List<EEGroupRelation> findByDeleted(boolean deleted);
     List<EEGroupRelation> findByDeleted(boolean deleted, Sort sort);
 
-    List<EEGroupRelation> findByGroupId(Long groupID);
+    List<EEGroupRelation> findByGroupIdAndDeleted(Long groupID, boolean deleted);
     EEGroupRelation findByAccountIdAndGroupIdAndDeleted(Long uid, Long gid , boolean deleted);
-    List<EEGroupRelation> findByAccountId(Long uid);
+    List<EEGroupRelation> findByAccountIdAndDeleted(Long uid, boolean deleted);
+    int countByGroupIdAndDeleted(Long groupID, boolean deleted);
 }

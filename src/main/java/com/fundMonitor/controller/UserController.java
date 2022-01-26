@@ -41,7 +41,9 @@ public class UserController extends BaseController {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
     private EEGroupRelationRepository eeGroupRelationRepository;
+    @Autowired
     private EEGroupRepository eeGroupRepository;
 
     /**
@@ -139,12 +141,17 @@ public class UserController extends BaseController {
         return new SuccessResponse<>();
     }
 
+    /**
+     * Added by Aresix
+     * @return All groups where the user belongs to.
+     */
     @GetMapping("/{id}/all_groups")
     @ApiOperation(value = "用户所在的组")
     public BaseResponse getGroups(@PathVariable Long id) {
-        List<EEGroupRelation> relations = eeGroupRelationRepository.findByAccountId(id);
+        List<EEGroupRelation> relations = eeGroupRelationRepository.findByAccountIdAndDeleted(id, false);
         List<Optional<EEGroup>> groups = new ArrayList<>();
         for(EEGroupRelation relation : relations){
+            System.out.println("group信息为："+relation.getGroupId()+"\t\t123\n");
             Optional<EEGroup> group = eeGroupRepository.findById(relation.getGroupId());
             groups.add(group);
         }

@@ -30,11 +30,11 @@ public class Task extends IEntity{
     @ApiModelProperty(value = "项目名")
     private String projectName;
 
-    @ApiModelProperty(value = "负责人")
-    @OneToMany
-    @Where(clause = "deleted = 0")
-    @JoinColumn(name = "taskId", referencedColumnName = "id", updatable = false, insertable = false)
-    private List<Account> accounts;
+//    @ApiModelProperty(value = "负责人")
+//    @OneToMany
+//    @Where(clause = "deleted = 0")
+//    @JoinColumn(name = "taskId", referencedColumnName = "id", updatable = false, insertable = false)
+//    private List<Account> accounts;
 
     @ApiModelProperty(value = "紧急程度")
     @Enumerated(EnumType.STRING)

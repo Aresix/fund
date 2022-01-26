@@ -38,8 +38,11 @@ public class TaskController extends BaseController {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
     private EETaskService eeTaskService;
+    @Autowired
     private EETaskRepository eeTaskRepository;
+    @Autowired
     private AccountRepository accountRepository;
 
     @PostMapping
@@ -85,23 +88,29 @@ public class TaskController extends BaseController {
     }
 
     //===================责任人====================
+    /**
+     * All the functions below are added by Aresix
+     * @return Operations about the person in charge and the corresponding group.
+     */
     @GetMapping("/{id}/in_charge")
     @ApiOperation(value = "根据id获取该task的责任人")
     public BaseResponse getInChargeList(@PathVariable Long id){
-        List<EETask> eeTasks = eeTaskService.getAllPersonInCharge(id);
+        List<EETask> eeTasks = eeTaskRepository.findByTaskIDAndDeleted(id,false);
+        System.out.println("许墨\t"+eeTasks.size());
         List<Optional<Account>> accounts = new ArrayList<>();
         for(EETask task : eeTasks){
             accounts.add(accountRepository.findById(task.getTaskPersonInChargeID()));
         }
-        return new BaseResponse<>(accounts);
+        return new SuccessResponse<>(accounts);
     }
 
     @PutMapping("assign")
     @ApiOperation(value = "分配责任人")
     public BaseResponse assign(@RequestBody EETask eeTask){
-        Preconditions.checkNotNull(eeTask.getTaskPersonInChargeID(),"未选中任何人");
+//        Preconditions.checkNotNull(eeTask.getTaskPersonInChargeID(),"未选中任何人");
         EETask task = eeTaskRepository.
-                findByTaskIDAndTaskPersonInChargeID(eeTask.getTaskPersonInChargeID(), eeTask.getTaskID());
+                findByTaskIDAndTaskPersonInChargeIDAndDeleted
+                        (eeTask.getTaskPersonInChargeID(), eeTask.getTaskID(), false);
         if (task != null) return new ErrorResponse("任务已分配");
         return new SuccessResponse<>(eeTaskService.saveOrUpdate(eeTask));
     }
@@ -109,7 +118,7 @@ public class TaskController extends BaseController {
     @DeleteMapping
     @ApiOperation(value = "删除责任人")
     public BaseResponse deleteOnePIC(@RequestBody EETask eeTask){
-        if (eeTaskRepository.countByTaskID(eeTask.getTaskID())==1)
+        if (eeTaskRepository.countByTaskIDAndDeleted(eeTask.getTaskID(),false)<=1)
             return new ErrorResponse("每个任务至少得有一位负责人");
         eeTaskService.deleteEntity(eeTask.getId());
         return new SuccessResponse<>();

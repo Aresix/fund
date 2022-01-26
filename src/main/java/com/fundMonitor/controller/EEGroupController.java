@@ -74,7 +74,7 @@ public class EEGroupController extends BaseController {
     public BaseResponse update(@RequestBody EEGroup eEGroup) {
         EEGroup old = eEGroupService.getById(eEGroup.getId());
         Preconditions.checkNotNull(old);
-        return new SuccessResponse<>(eEGroupService.saveOrUpdate(eEGroup));
+            return new SuccessResponse<>(eEGroupService.saveOrUpdate(eEGroup));
     }
 
     @DeleteMapping("/{id}")
@@ -91,10 +91,14 @@ public class EEGroupController extends BaseController {
     }
 
     //===================组员======================
+    /**
+     * The functions below are added by Aresix
+     * @return Display/Add/Delete the members in some group.
+     */
     @GetMapping("/{id}/member_list")
     @ApiOperation(value = "根据Id获取组内成员")
     public BaseResponse getMembers(@PathVariable Long id){
-        List<EEGroupRelation> relations = eeGroupRelationRepository.findByGroupId(id);
+        List<EEGroupRelation> relations = eeGroupRelationRepository.findByGroupIdAndDeleted(id,false);
         List<Account> accounts = new ArrayList<>();
         for(EEGroupRelation relation : relations){
             Account account = userService.getById(relation.getAccountId());
@@ -114,12 +118,18 @@ public class EEGroupController extends BaseController {
         return new SuccessResponse<>(eeGroupRelationService.saveOrUpdate(relation));
     }
 
-    @DeleteMapping("/{gid}/{uid}")
+    @DeleteMapping("remove_member")
     @ApiOperation(value = "在组内删除成员")
     public BaseResponse deleteMember(@RequestBody EEGroupRelation relation){
         EEGroupRelation del = eeGroupRelationRepository.
                 findByAccountIdAndGroupIdAndDeleted(relation.getAccountId(), relation.getGroupId(), false);
         eeGroupRelationService.delete(del);
         return new SuccessResponse<>();
+    }
+
+    @GetMapping("/{gid}/count")
+    @ApiOperation(value = "组内人数")
+    public BaseResponse countMember(@PathVariable Long gid){
+        return new BaseResponse<>(eeGroupRelationRepository.countByGroupIdAndDeleted(gid,false));
     }
 }

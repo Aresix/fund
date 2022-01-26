@@ -30,6 +30,6 @@ public class EEGroupRelationService extends BasicService<EEGroupRelation, Long> 
     }
 
     public List<EEGroupRelation> getGroupRelation(Long groupID){
-        return eEGroupRelationRepository.findByGroupId(groupID);
+        return eEGroupRelationRepository.findByGroupIdAndDeleted(groupID, false);
     }
 }
