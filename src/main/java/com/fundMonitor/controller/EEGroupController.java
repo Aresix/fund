@@ -2,13 +2,10 @@ package com.fundMonitor.controller;
 
 import com.fundMonitor.entity.Account;
 import com.fundMonitor.entity.EEGroupRelation;
-import com.fundMonitor.repository.AccountRepository;
 import com.fundMonitor.repository.EEGroupRelationRepository;
 import com.fundMonitor.service.EEGroupRelationService;
 import com.fundMonitor.service.UserService;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.fundMonitor.entity.EEGroup;
 import com.fundMonitor.repository.EEGroupRepository;
 import com.fundMonitor.request.OrderRequest;
@@ -21,14 +18,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author lli.chen
@@ -45,9 +38,11 @@ public class EEGroupController extends BaseController {
 
     @Autowired
     private UserService userService;
-//    @Autowired
+
+    @Autowired
     private EEGroupRelationService eeGroupRelationService;
-//    @Autowired
+
+    @Autowired
     private EEGroupRelationRepository eeGroupRelationRepository;
 
     @PostMapping
@@ -99,10 +94,10 @@ public class EEGroupController extends BaseController {
     @GetMapping("/{id}/member_list")
     @ApiOperation(value = "根据Id获取组内成员")
     public BaseResponse getMembers(@PathVariable Long id){
-        List<EEGroupRelation> relations = eeGroupRelationRepository.findByGroupID(id);
+        List<EEGroupRelation> relations = eeGroupRelationRepository.findByGroupId(id);
         List<Account> accounts = new ArrayList<>();
         for(EEGroupRelation relation : relations){
-            Account account = userService.getById(relation.getAccountID());
+            Account account = userService.getById(relation.getAccountId());
             accounts.add(account);
         }
         return new SuccessResponse<>(accounts);
@@ -112,7 +107,7 @@ public class EEGroupController extends BaseController {
     @ApiOperation(value = "在组内添加新成员")
     public BaseResponse addMember(@RequestBody EEGroupRelation relation){
         EEGroupRelation old = eeGroupRelationRepository.
-                findByAccountIDAndGroupID(relation.getAccountID(), relation.getGroupID());
+                findByAccountIdAndGroupIdAndDeleted(relation.getAccountId(), relation.getGroupId(), false);
         if(old != null){
             return new BaseResponse<>("用户已在组内");
         }
@@ -123,7 +118,7 @@ public class EEGroupController extends BaseController {
     @ApiOperation(value = "在组内删除成员")
     public BaseResponse deleteMember(@RequestBody EEGroupRelation relation){
         EEGroupRelation del = eeGroupRelationRepository.
-                findByAccountIDAndGroupID(relation.getAccountID(), relation.getGroupID());
+                findByAccountIdAndGroupIdAndDeleted(relation.getAccountId(), relation.getGroupId(), false);
         eeGroupRelationService.delete(del);
         return new SuccessResponse<>();
     }

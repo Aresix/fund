@@ -20,8 +20,8 @@ public class Automatic {
     private static List<ClassDetail> getClassDetails() {
         List<ClassDetail> classDetails = new ArrayList<>();
         ClassDetail classDetail = new ClassDetail();
-        classDetail.setClassName("EEGroup");
-        classDetail.setPathName("EEGroup");
+        classDetail.setClassName("EETask");
+        classDetail.setPathName("EETask");
         classDetail.setControllerName("小组");
         classDetails.add(classDetail);
         return classDetails;
@@ -62,7 +62,7 @@ public class Automatic {
     private static void generate(ClassDetail classDetail) {
         generate(rootPath + rootRepositoryPath, "Repository", classDetail);
         generate(rootPath + rootServicePath, "Service", classDetail);
-        generate(rootPath + rootControllerPath, "Controller", classDetail);
+        //generate(rootPath + rootControllerPath, "Controller", classDetail);
     }
 
     private static final String packageName = "fundMonitor";

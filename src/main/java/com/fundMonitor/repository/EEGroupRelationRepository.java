@@ -1,17 +1,19 @@
 package com.fundMonitor.repository;
 
-import com.fundMonitor.entity.Account;
 import com.fundMonitor.entity.EEGroupRelation;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
 /**
- * @author Aresix
- * @date 2022/1/25 12:48
+ * @author lli.chen
  */
 public interface EEGroupRelationRepository extends PagingAndSortingRepository<EEGroupRelation, Long> {
-    List<EEGroupRelation> findByGroupID(Long groupID);
-    EEGroupRelation findByAccountIDAndGroupID(Long uid, Long gid);
-    List<EEGroupRelation> findByAccountID(Long uid);
+    List<EEGroupRelation> findByDeleted(boolean deleted);
+    List<EEGroupRelation> findByDeleted(boolean deleted, Sort sort);
+
+    List<EEGroupRelation> findByGroupId(Long groupID);
+    EEGroupRelation findByAccountIdAndGroupIdAndDeleted(Long uid, Long gid , boolean deleted);
+    List<EEGroupRelation> findByAccountId(Long uid);
 }
