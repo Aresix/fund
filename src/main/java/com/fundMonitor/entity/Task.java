@@ -36,6 +36,12 @@ public class Task extends IEntity{
 //    @JoinColumn(name = "taskId", referencedColumnName = "id", updatable = false, insertable = false)
 //    private List<Account> accounts;
 
+    @ApiModelProperty(value = "任务日志")
+    @OneToMany
+    @Where(clause = "deleted = 0")
+    @JoinColumn(name = "taskId", referencedColumnName = "id", updatable = false, insertable = false)
+    private List<Log> logs;
+
     @ApiModelProperty(value = "紧急程度")
     @Enumerated(EnumType.STRING)
     private TaskPriority taskPriority = TaskPriority.common;
