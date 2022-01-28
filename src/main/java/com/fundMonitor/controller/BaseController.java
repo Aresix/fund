@@ -71,7 +71,7 @@ public class BaseController {
 
 
     public String sendTelCode(TelVerifyInfo telVerifyInfo, String phoneNum) {
-        if (!Strings.isNullOrEmpty(phoneNum) && telVerifyInfo != null) {
+        if (!Strings.isNullOrEmpty(phoneNum) && telVerifyInfo != null && phoneNum.length() == 11) {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             if (telVerifyInfo.getTelCodeValidTime() != null && telVerifyInfo.getTelCodeValidTime().after(timestamp)) {
                 return "验证码已发送，请勿重复操作";

@@ -63,6 +63,6 @@ public class MessageUtil {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        System.out.println(request("13509447983", "【送温暖】 您有一条审批消息333。"));
+        System.out.println(request("19921892267", "【送温暖】 您有一条审批消息333。"));
     }
 }

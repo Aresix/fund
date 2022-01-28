@@ -187,10 +187,11 @@ public class UserController extends BaseController {
     public BaseResponse verCode(@RequestParam String phoneNum,
                                 @RequestParam String code) {
         TelVerifyInfo telVerifyInfo = telVerifyInfoRepository.findByPhoneNumAndDeleted(phoneNum, false);
+        System.out.println(telVerifyInfo);
         if(telVerifyInfo == null || telVerifyInfo.getTelCodeValidTime().getTime() < System.currentTimeMillis()){
             return new ErrorResponse("验证码已过期,请重新获取验证码");
         }else {
-            if (telVerifyInfo.getTelCode() != code) {
+            if (!telVerifyInfo.getTelCode().equals(code)) {
                 return new ErrorResponse("验证码错误");
             }
         }
