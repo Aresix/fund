@@ -72,6 +72,9 @@ public class Task extends IEntity{
     @ApiModelProperty(value = "任务链接")
     private String taskURL;
 
+    @ApiModelProperty(value = "任务完成逻辑")
+    private String taskComLogic;
+
     @ApiModelProperty(value = "r")
     private int r;
 
