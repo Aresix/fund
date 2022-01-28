@@ -16,6 +16,7 @@ import com.fundMonitor.response.ErrorResponse;
 import com.fundMonitor.response.SuccessResponse;
 import com.fundMonitor.security.UserAuthenticationProvider;
 import com.fundMonitor.utils.EntityUtils;
+import com.fundMonitor.utils.MailUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
@@ -193,6 +194,13 @@ public class UserController extends BaseController {
                 return new ErrorResponse("验证码错误");
             }
         }
+        return new SuccessResponse();
+    }
+
+    @ApiOperation(value = "测试邮箱")
+    @PostMapping("/testMail")
+    public BaseResponse testMail(@RequestParam String mail) {
+        MailUtils.send("测试","这是一个测试邮件","hejinotify",mail);
         return new SuccessResponse();
     }
 }
