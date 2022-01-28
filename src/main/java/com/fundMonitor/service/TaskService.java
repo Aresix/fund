@@ -33,15 +33,22 @@ public class TaskService extends BasicService<Task, Long> {
 
     public List<Task> getTodayTasks(int page, int size, List<OrderRequest> order) {
         Sort sort = getSortBy(order, new Task());
-        return taskRepository.findByTaskStatusAndDeleted(String.valueOf(TaskStatus.inProcess), false,sort);
+        return taskRepository.findByTaskStatusAndDeleted(TaskStatus.inProcess, false,sort);
     }
 
     public List<Task> getWaitingTasks(int page, int size, List<OrderRequest> order) {
         Sort sort = getSortBy(order,new Task());
-        List<Task> result = taskRepository.findByTaskStatusAndDeleted(String.valueOf(TaskStatus.timeExceededLimit),false,sort);
-        result.addAll(taskRepository.findByTaskStatusAndDeleted(String.valueOf(TaskStatus.inProcess),false,sort));
+        List<Task> result = taskRepository.findByTaskStatusAndDeleted(TaskStatus.timeExceededLimit,false,sort);
+        result.addAll(taskRepository.findByTaskStatusAndDeleted(TaskStatus.inProcess,false,sort));
         return result;
     }
+
+    /**
+     * 仅测试用
+     */
+//    public List<Task> getTodayTasks(){
+//        return taskRepository.findByTaskStatusAndDeleted(TaskStatus.inProcess,false);
+//    }
 
     public List<Task> getMyTasks(Long creator, int page, int size, List<OrderRequest> order) {
         Sort sort = getSortBy(order, new Task());

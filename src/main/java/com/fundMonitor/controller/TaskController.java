@@ -97,7 +97,7 @@ public class TaskController extends BaseController {
     @ApiOperation(value = "根据id获取该task的责任人")
     public BaseResponse getInChargeList(@PathVariable Long id){
         List<EETask> eeTasks = eeTaskRepository.findByTaskIDAndDeleted(id,false);
-        System.out.println("许墨\t"+eeTasks.size());
+//        System.out.println("许墨\t"+eeTasks.size());
         List<Optional<Account>> accounts = new ArrayList<>();
         for(EETask task : eeTasks){
             accounts.add(accountRepository.findById(task.getTaskPersonInChargeID()));
@@ -135,6 +135,8 @@ public class TaskController extends BaseController {
         Pageable pageable = new PageRequest(page,size);
         List<Task> tasks = taskService.getTodayTasks(page,size,order);
         return new SuccessResponse<>(PageResponse.build(tasks, pageable));
+//    public BaseResponse getTodayList(){
+//        return new SuccessResponse<>(taskService.getTodayTasks());
     }
 
     @GetMapping("waitingList")
