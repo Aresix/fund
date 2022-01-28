@@ -1,5 +1,6 @@
 package com.fundMonitor.controller;
 
+import com.fundMonitor.constants.TaskStatus;
 import com.fundMonitor.entity.Account;
 import com.fundMonitor.entity.EETask;
 import com.fundMonitor.repository.AccountRepository;
@@ -122,5 +123,35 @@ public class TaskController extends BaseController {
             return new ErrorResponse("每个任务至少得有一位负责人");
         eeTaskService.deleteEntity(eeTask.getId());
         return new SuccessResponse<>();
+    }
+
+    @GetMapping("today")
+    @ApiOperation(value = "分页获取只看今日")
+    public BaseResponse getTodayList(@RequestParam(required = false, defaultValue = "0") int page,
+                                @RequestParam(required = false, defaultValue = Integer_MAX_VALUE) int size
+
+    ) {
+        List<OrderRequest> order = null;
+        Pageable pageable = new PageRequest(page,size);
+        List<Task> tasks = taskService.getTodayTasks(page,size,order);
+//        if (!Strings.isNullOrEmpty(searchCondition)) {
+//            tasks = tasks.stream().filter(task -> task.toString().contains(searchCondition)).collect(Collectors.toList());
+//        }
+        return new SuccessResponse<>(PageResponse.build(tasks, pageable));
+    }
+
+    @GetMapping("waitingList")
+    @ApiOperation(value = "分页获取“隐藏已取消已完成”")
+    public BaseResponse getWaitingList(@RequestParam(required = false, defaultValue = "0") int page,
+                                @RequestParam(required = false, defaultValue = Integer_MAX_VALUE) int size
+
+    ) {
+        List<OrderRequest> order = null;
+        Pageable pageable = new PageRequest(page,size);
+        List<Task> tasks = taskService.getWaitingTask(page,size,order);
+//        if (!Strings.isNullOrEmpty(searchCondition)) {
+//            tasks = tasks.stream().filter(task -> task.toString().contains(searchCondition)).collect(Collectors.toList());
+//        }
+        return new SuccessResponse<>(PageResponse.build(tasks, pageable));
     }
 }

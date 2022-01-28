@@ -12,4 +12,5 @@ import java.util.List;
 public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
     List<Task> findByDeleted(boolean deleted);
     List<Task> findByDeleted(boolean deleted, Sort sort);
+    List<Task> findByTaskStatusAndDeleted(String taskStatus, boolean deleted, Sort sort);
 }
