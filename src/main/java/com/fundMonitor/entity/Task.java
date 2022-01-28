@@ -25,7 +25,7 @@ public class Task extends IEntity{
     private String taskDescription;
 
     @ApiModelProperty(value = "发布者")
-    private String creator;
+    private Long creator;
 
     @ApiModelProperty(value = "项目名")
     private String projectName;

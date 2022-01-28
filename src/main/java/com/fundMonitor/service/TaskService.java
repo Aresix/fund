@@ -36,10 +36,16 @@ public class TaskService extends BasicService<Task, Long> {
         return taskRepository.findByTaskStatusAndDeleted(String.valueOf(TaskStatus.inProcess), false,sort);
     }
 
-    public List<Task> getWaitingTask(int page, int size, List<OrderRequest> order) {
+    public List<Task> getWaitingTasks(int page, int size, List<OrderRequest> order) {
         Sort sort = getSortBy(order,new Task());
         List<Task> result = taskRepository.findByTaskStatusAndDeleted(String.valueOf(TaskStatus.timeExceededLimit),false,sort);
         result.addAll(taskRepository.findByTaskStatusAndDeleted(String.valueOf(TaskStatus.inProcess),false,sort));
+        return result;
+    }
+
+    public List<Task> getMyTasks(Long creator, int page, int size, List<OrderRequest> order) {
+        Sort sort = getSortBy(order, new Task());
+        List<Task> result = taskRepository.findByCreatorAndDeleted(creator, false, sort);
         return result;
     }
 }

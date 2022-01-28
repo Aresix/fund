@@ -134,9 +134,6 @@ public class TaskController extends BaseController {
         List<OrderRequest> order = null;
         Pageable pageable = new PageRequest(page,size);
         List<Task> tasks = taskService.getTodayTasks(page,size,order);
-//        if (!Strings.isNullOrEmpty(searchCondition)) {
-//            tasks = tasks.stream().filter(task -> task.toString().contains(searchCondition)).collect(Collectors.toList());
-//        }
         return new SuccessResponse<>(PageResponse.build(tasks, pageable));
     }
 
@@ -148,10 +145,20 @@ public class TaskController extends BaseController {
     ) {
         List<OrderRequest> order = null;
         Pageable pageable = new PageRequest(page,size);
-        List<Task> tasks = taskService.getWaitingTask(page,size,order);
-//        if (!Strings.isNullOrEmpty(searchCondition)) {
-//            tasks = tasks.stream().filter(task -> task.toString().contains(searchCondition)).collect(Collectors.toList());
-//        }
+        List<Task> tasks = taskService.getWaitingTasks(page,size,order);
+        return new SuccessResponse<>(PageResponse.build(tasks, pageable));
+    }
+
+    @GetMapping("/{creatorID}/myList")
+    @ApiOperation(value = "根据id分页获取“我发布的“")
+    public BaseResponse getMyList(@RequestParam(required = false, defaultValue = "0") int page,
+                                  @RequestParam(required = false, defaultValue = Integer_MAX_VALUE) int size,
+                                  @PathVariable Long creatorID
+
+    ) {
+        List<OrderRequest> order = null;
+        Pageable pageable = new PageRequest(page,size);
+        List<Task> tasks = taskService.getMyTasks(creatorID,page,size,order);
         return new SuccessResponse<>(PageResponse.build(tasks, pageable));
     }
 }
