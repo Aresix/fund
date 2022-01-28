@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration
 public class WebConfig extends SpringDataWebConfiguration {
-    @Value("${celebritiesGathering.upload.file.path}")
+    @Value("${fundMonitor.upload.file.path}")
     private String rootPath;
 
     public WebConfig(ApplicationContext context, ObjectFactory<ConversionService> conversionService) {

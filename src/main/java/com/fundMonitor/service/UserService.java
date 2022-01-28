@@ -43,9 +43,16 @@ public class UserService extends BasicService<Account, Long> implements UserDeta
     }
 
     public Account getByLoginName(String loginName) {
-        Account account = userRepo.findByLoginName(loginName);
+        Account account = userRepo.findByLoginNameAndDeleted(loginName, false);
         return account;
     }
+
+    public Account getByPhone(String phone) {
+        Account account = userRepo.findByPhoneAndDeleted(phone, false);
+        return account;
+    }
+
+
 
     public Page<Account> getAccountInfos(String loginName, RoleType roleType, int page, int size, List<OrderRequest> order) {
         Pageable pageable = getPageableBy(order, new PageRequest(page, size), new Account());

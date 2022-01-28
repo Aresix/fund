@@ -4,9 +4,11 @@ import com.fundMonitor.constants.RoleType;
 import com.fundMonitor.entity.Account;
 import com.fundMonitor.entity.EEGroup;
 import com.fundMonitor.entity.EEGroupRelation;
+import com.fundMonitor.entity.TelVerifyInfo;
 import com.fundMonitor.repository.AccountRepository;
 import com.fundMonitor.repository.EEGroupRelationRepository;
 import com.fundMonitor.repository.EEGroupRepository;
+import com.fundMonitor.repository.TelVerifyInfoRepository;
 import com.fundMonitor.request.LoginRequest;
 import com.fundMonitor.request.OrderRequest;
 import com.fundMonitor.response.BaseResponse;
@@ -15,8 +17,10 @@ import com.fundMonitor.response.SuccessResponse;
 import com.fundMonitor.security.UserAuthenticationProvider;
 import com.fundMonitor.utils.EntityUtils;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,6 +47,10 @@ public class UserController extends BaseController {
 
     @Autowired
     private EEGroupRelationRepository eeGroupRelationRepository;
+
+    @Autowired
+    private TelVerifyInfoRepository telVerifyInfoRepository;
+
     @Autowired
     private EEGroupRepository eeGroupRepository;
 
@@ -63,7 +71,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "新建用户")
     public BaseResponse create(@RequestBody Account account) {
         Preconditions.checkNotNull(account.getLoginName(), "用户名不能为空。");
-        Account old = accountRepository.findByLoginName(account.getLoginName());
+        Account old = accountRepository.findByLoginNameAndDeleted(account.getLoginName(), false);
         if (old != null) {
             return new ErrorResponse("用户名不能重复。");
         }
@@ -116,7 +124,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "更新用户信息")
     public BaseResponse updateInfo(@RequestBody Account account) {
         Account currentAccount = userService.getById(account.getId());
-        Account old = accountRepository.findByLoginName(account.getLoginName());
+        Account old = accountRepository.findByLoginNameAndDeleted(account.getLoginName(), false);
         if (old != null && old.getId() != account.getId()) {
             return new ErrorResponse("登陆账号不能重复。");
         }
@@ -156,5 +164,35 @@ public class UserController extends BaseController {
             groups.add(group);
         }
         return new SuccessResponse<>(groups);
+    }
+
+    @ApiOperation(value = "获取验证码")
+    @GetMapping("/telCode")
+    public BaseResponse getCode(@RequestParam String phoneNum) {
+        TelVerifyInfo telVerifyInfo = telVerifyInfoRepository.findByPhoneNumAndDeleted(phoneNum, false);
+        if (telVerifyInfo == null) {
+            telVerifyInfo = new TelVerifyInfo();
+            telVerifyInfo.setPhoneNum(phoneNum);
+        }
+        String errorMessage = sendTelCode(telVerifyInfo, phoneNum);
+        if (!Strings.isNullOrEmpty(errorMessage)) {
+            return new ErrorResponse(errorMessage);
+        }
+        return new SuccessResponse();
+    }
+
+    @ApiOperation(value = "验证验证码")
+    @PostMapping("/verCode")
+    public BaseResponse verCode(@RequestParam String phoneNum,
+                                @RequestParam String code) {
+        TelVerifyInfo telVerifyInfo = telVerifyInfoRepository.findByPhoneNumAndDeleted(phoneNum, false);
+        if(telVerifyInfo == null || telVerifyInfo.getTelCodeValidTime().getTime() < System.currentTimeMillis()){
+            return new ErrorResponse("验证码已过期,请重新获取验证码");
+        }else {
+            if (telVerifyInfo.getTelCode() != code) {
+                return new ErrorResponse("验证码错误");
+            }
+        }
+        return new SuccessResponse();
     }
 }

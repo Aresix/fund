@@ -13,5 +13,7 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
     Page<Account> findByDeleted(boolean deleted, Pageable pageable);
     Page<Account> findByLoginNameIsLikeAndRoleTypeInAndDeleted(String loginName,RoleType[] roleTypes,boolean deleted, Pageable pageable);
     Page<Account> findByRoleTypeInAndDeleted(RoleType[] roleTypes,boolean deleted, Pageable pageable);
-    Account findByLoginName(String loginName);
+    Account findByLoginNameAndDeleted(String loginName, boolean deleted);
+
+    Account findByPhoneAndDeleted(String phone, boolean deleted);
 }
