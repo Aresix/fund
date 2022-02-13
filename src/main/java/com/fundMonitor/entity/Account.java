@@ -40,4 +40,11 @@ public class Account extends IEntity {
     public String getAuthority() {
         return "ROLE_ACCOUNT";
     }
+
+
+    @ApiModelProperty(value = "电话通知")
+    private Boolean phoneNotification;
+
+    @ApiModelProperty(value = "邮件通知")
+    private Boolean emailNotification;
 }

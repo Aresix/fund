@@ -39,12 +39,6 @@ public class Task extends IEntity{
     @ApiModelProperty(value = "日志地址（filePath）")
     private String logPath;
 
-    @ApiModelProperty(value = "任务日志")
-    @OneToMany
-    @Where(clause = "deleted = 0")
-    @JoinColumn(name = "taskId", referencedColumnName = "id", updatable = false, insertable = false)
-    private List<Log> logs;
-
     @ApiModelProperty(value = "紧急程度")
     @Enumerated(EnumType.STRING)
     private TaskPriority taskPriority = TaskPriority.common;

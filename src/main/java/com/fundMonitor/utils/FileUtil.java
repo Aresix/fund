@@ -10,8 +10,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class FileUtil {
-    public static String FILE_PREFIX = "C:\\Users\\Administrator\\Desktop\\fundMonitor\\tmp\\";
-    public static String FE_RESOURCES = "C:\\Users\\Administrator\\Desktop\\fundMonitor\\resources\\";
+    public static String FILE_PREFIX = "C:\\Users\\Administrator\\Desktop\\Fund\\tmp\\";
+    public static String FE_RESOURCES = "C:\\Users\\Administrator\\Desktop\\Fund\\resources\\";
 
     {
         File file = new File(FILE_PREFIX);

@@ -1,5 +1,6 @@
 package com.fundMonitor.utils;
 
+import com.fundMonitor.entity.Account;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,5 +16,9 @@ public class UserUtil {
         }
 
         return username;
+    }
+
+    public static Account currentUser() {
+        return (Account)SecurityContextHolder.getContext().getAuthentication().getDetails();
     }
 }
