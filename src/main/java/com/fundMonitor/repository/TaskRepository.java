@@ -14,6 +14,7 @@ public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
     List<Task> findByDeleted(boolean deleted);
     List<Task> findByDeleted(boolean deleted, Sort sort);
     List<Task> findByTaskStatusAndDeleted(TaskStatus taskStatus, boolean deleted, Sort sort);
+    List<Task> findByTaskStatusAndDeleted(TaskStatus taskStatus, boolean deleted);
     List<Task> findByCreatorAndDeleted(Long creator, boolean deleted, Sort sort);
 //    List<Task> findByTaskStatusAndDeleted(TaskStatus taskStatus, boolean deleted);
 }
