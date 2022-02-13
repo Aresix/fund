@@ -26,7 +26,7 @@ public class TimerRunner {
     // 1min检测任务是否完成
     @Scheduled(fixedRate = 1000 * 60 * 60)
     public void finTask() {
-
+        System.out.println("测试");
     }
 
     // 1min把日志文件更新到数据库
