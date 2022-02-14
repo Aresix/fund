@@ -1,6 +1,5 @@
 package com.fundMonitor.controller;
 
-import com.fundMonitor.constants.TaskStatus;
 import com.fundMonitor.entity.Account;
 import com.fundMonitor.entity.EETask;
 import com.fundMonitor.repository.AccountRepository;
@@ -17,6 +16,7 @@ import com.fundMonitor.response.SuccessResponse;
 import com.fundMonitor.service.TaskService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +56,10 @@ public class TaskController extends BaseController {
     @ApiOperation(value = "根据Id获取任务")
     public BaseResponse getOne(@PathVariable Long id) {
         Task task = taskService.getById(id);
-        return new SuccessResponse<>(task);
+        Pair<Task, List<Optional<Account>>> taskListPair = new Pair<>(
+                task, getChargeListViaTask(task)
+        );
+        return new SuccessResponse<>(taskListPair);
     }
 
     @GetMapping("/list")
@@ -67,11 +70,18 @@ public class TaskController extends BaseController {
     ) {
         List<OrderRequest> order = null;
         Pageable pageable = new PageRequest(page,size);
+        // 同时返回负责人
+        List<Pair<Task,List<Optional<Account>>>> result = new ArrayList<>();
         List<Task> tasks = taskService.getTasks(page,size,order);
+        // 根据task,找到责任人
+        for (Task task : tasks){
+            List<Optional<Account>> accounts = getChargeListViaTask(task);
+            result.add(new Pair<>(task,accounts));
+        }
 //        if (!Strings.isNullOrEmpty(searchCondition)) {
 //            tasks = tasks.stream().filter(task -> task.toString().contains(searchCondition)).collect(Collectors.toList());
 //        }
-        return new SuccessResponse<>(PageResponse.build(tasks, pageable));
+        return new SuccessResponse<>(PageResponse.build(result, pageable));
     }
 
     @PutMapping
@@ -134,7 +144,12 @@ public class TaskController extends BaseController {
         List<OrderRequest> order = null;
         Pageable pageable = new PageRequest(page,size);
         List<Task> tasks = taskService.getTodayTasks(page,size,order);
-        return new SuccessResponse<>(PageResponse.build(tasks, pageable));
+        List<Pair<Task,List<Optional<Account>>>> result = new ArrayList<>();
+        for (Task task : tasks){
+            List<Optional<Account>> accounts = getChargeListViaTask(task);
+            result.add(new Pair<>(task,accounts));
+        }
+        return new SuccessResponse<>(PageResponse.build(result, pageable));
 //    public BaseResponse getTodayList(){
 //        return new SuccessResponse<>(taskService.getTodayTasks());
     }
@@ -148,7 +163,12 @@ public class TaskController extends BaseController {
         List<OrderRequest> order = null;
         Pageable pageable = new PageRequest(page,size);
         List<Task> tasks = taskService.getWaitingTasks(page,size,order);
-        return new SuccessResponse<>(PageResponse.build(tasks, pageable));
+        List<Pair<Task,List<Optional<Account>>>> result = new ArrayList<>();
+        for (Task task:tasks){
+            List<Optional<Account>> accounts = getChargeListViaTask(task);
+            result.add(new Pair<>(task,accounts));
+        }
+        return new SuccessResponse<>(PageResponse.build(result, pageable));
     }
 
     @GetMapping("/{creatorID}/myList")
@@ -161,6 +181,25 @@ public class TaskController extends BaseController {
         List<OrderRequest> order = null;
         Pageable pageable = new PageRequest(page,size);
         List<Task> tasks = taskService.getMyTasks(creatorID,page,size,order);
-        return new SuccessResponse<>(PageResponse.build(tasks, pageable));
+        List<Pair<Task,List<Optional<Account>>>> result = new ArrayList<>();
+        for (Task task : tasks){
+            List<Optional<Account>> accounts = getChargeListViaTask(task);
+            result.add(new Pair<>(task,accounts));
+        }
+        return new SuccessResponse<>(PageResponse.build(result, pageable));
+    }
+
+    /**
+     * Return the list of person in charge based on some task.
+     * @param task
+     * @return The list of person in charge of this task.
+     */
+    private List<Optional<Account>> getChargeListViaTask(Task task){
+        List<EETask> eeTasks = eeTaskRepository.findByTaskIDAndDeleted(task.getId(),false);
+        List<Optional<Account>> accounts = new ArrayList<>();
+        for (EETask eeTask : eeTasks){
+            accounts.add(accountRepository.findById(eeTask.getTaskPersonInChargeID()));
+        }
+        return accounts;
     }
 }
