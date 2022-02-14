@@ -23,4 +23,7 @@ public class Log extends IEntity {
 
     @ApiModelProperty(value = "日志信息")
     private String message;
+
+    @ApiModelProperty(value = "任务id")
+    private Long taskId;
 }

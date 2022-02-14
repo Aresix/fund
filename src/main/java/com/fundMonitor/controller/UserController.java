@@ -15,8 +15,10 @@ import com.fundMonitor.response.BaseResponse;
 import com.fundMonitor.response.ErrorResponse;
 import com.fundMonitor.response.SuccessResponse;
 import com.fundMonitor.security.UserAuthenticationProvider;
+import com.fundMonitor.service.UserService;
 import com.fundMonitor.utils.EntityUtils;
 import com.fundMonitor.utils.MailUtils;
+import com.fundMonitor.utils.UserUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
@@ -27,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -45,6 +48,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private EEGroupRelationRepository eeGroupRelationRepository;
@@ -202,6 +208,24 @@ public class UserController extends BaseController {
     @PostMapping("/testMail")
     public BaseResponse testMail(@RequestParam String mail) {
         MailUtils.send("测试","这是一个测试邮件","hejinotify",mail);
+        return new SuccessResponse();
+    }
+
+    @ApiOperation(value = "设置邮箱告警")
+    @PostMapping("/email")
+    public BaseResponse email() {
+        Account account = UserUtil.currentUser();
+        account.setEmailNotification(true);
+        userService.saveOrUpdate(account);
+        return new SuccessResponse();
+    }
+
+    @ApiOperation(value = "设置电话告警")
+    @PostMapping("/phone")
+    public BaseResponse phone() {
+        Account account = UserUtil.currentUser();
+        account.setPhoneNotification(true);
+        userService.saveOrUpdate(account);
         return new SuccessResponse();
     }
 }

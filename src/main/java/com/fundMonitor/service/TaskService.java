@@ -43,6 +43,12 @@ public class TaskService extends BasicService<Task, Long> {
         return result;
     }
 
+    public List<Task> getWaitingTasks() {
+        List<Task> result = taskRepository.findByTaskStatusAndDeleted(TaskStatus.timeExceededLimit, false);
+        result.addAll(taskRepository.findByTaskStatusAndDeleted(TaskStatus.inProcess, false));
+        return result;
+    }
+
     /**
      * 仅测试用
      */
