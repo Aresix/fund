@@ -1,11 +1,15 @@
 package com.fundMonitor.controller;
 
+import com.fundMonitor.constants.TaskPriority;
+import com.fundMonitor.constants.TaskStatus;
+import com.fundMonitor.constants.TaskType;
 import com.fundMonitor.entity.Account;
 import com.fundMonitor.entity.EETask;
 import com.fundMonitor.repository.AccountRepository;
 import com.fundMonitor.repository.EETaskRepository;
 import com.fundMonitor.response.ErrorResponse;
 import com.fundMonitor.service.EETaskService;
+import com.fundMonitor.utils.DateUtil;
 import com.google.common.base.Preconditions;
 import com.fundMonitor.entity.Task;
 import com.fundMonitor.repository.TaskRepository;
@@ -22,9 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author lli.chen
@@ -143,15 +145,29 @@ public class TaskController extends BaseController {
     ) {
         List<OrderRequest> order = null;
         Pageable pageable = new PageRequest(page,size);
-        List<Task> tasks = taskService.getTodayTasks(page,size,order);
-        List<Pair<Task,List<Optional<Account>>>> result = new ArrayList<>();
-        for (Task task : tasks){
-            List<Optional<Account>> accounts = getChargeListViaTask(task);
-            result.add(new Pair<>(task,accounts));
-        }
-        return new SuccessResponse<>(PageResponse.build(result, pageable));
+//        List<Task> tasks = taskService.getTodayTasks(page,size,order);
+        List<Task> tasks = taskService.getSomeDayTasks(
+                DateUtil.YYMMDD.format(new Date()),page,size,order);
+        return getListBaseResponse(pageable, tasks);
 //    public BaseResponse getTodayList(){
 //        return new SuccessResponse<>(taskService.getTodayTasks());
+    }
+
+    @GetMapping("tomorrow")
+    @ApiOperation(value = "分页获取只看明日")
+    public BaseResponse getTomorrowList(@RequestParam(required = false,defaultValue = "0") int page,
+                                        @RequestParam(required = false,defaultValue = Integer_MAX_VALUE) int size){
+        List<OrderRequest> order = null;
+        Pageable pageable = new PageRequest(page,size);
+        // 获取明日日期
+        Date tomorrow = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(tomorrow);
+        calendar.add(Calendar.DATE,1);
+        tomorrow=calendar.getTime();
+        List<Task> tasks = taskService.getSomeDayTasks(
+                DateUtil.YYMMDD.format(tomorrow),page,size,order);
+        return getListBaseResponse(pageable, tasks);
     }
 
     @GetMapping("waitingList")
@@ -163,12 +179,7 @@ public class TaskController extends BaseController {
         List<OrderRequest> order = null;
         Pageable pageable = new PageRequest(page,size);
         List<Task> tasks = taskService.getWaitingTasks(page,size,order);
-        List<Pair<Task,List<Optional<Account>>>> result = new ArrayList<>();
-        for (Task task:tasks){
-            List<Optional<Account>> accounts = getChargeListViaTask(task);
-            result.add(new Pair<>(task,accounts));
-        }
-        return new SuccessResponse<>(PageResponse.build(result, pageable));
+        return getListBaseResponse(pageable, tasks);
     }
 
     @GetMapping("/{creatorID}/myList")
@@ -181,12 +192,43 @@ public class TaskController extends BaseController {
         List<OrderRequest> order = null;
         Pageable pageable = new PageRequest(page,size);
         List<Task> tasks = taskService.getMyTasks(creatorID,page,size,order);
-        List<Pair<Task,List<Optional<Account>>>> result = new ArrayList<>();
-        for (Task task : tasks){
-            List<Optional<Account>> accounts = getChargeListViaTask(task);
-            result.add(new Pair<>(task,accounts));
-        }
-        return new SuccessResponse<>(PageResponse.build(result, pageable));
+        return getListBaseResponse(pageable, tasks);
+    }
+
+    @GetMapping("/taskStatus/list")
+    @ApiOperation(value = "分页获取：根据【任务状态】筛选的任务")
+    public BaseResponse getSomeList(@RequestParam(required = false, defaultValue = "0") int page,
+                                  @RequestParam(required = false, defaultValue = Integer_MAX_VALUE) int size,
+                                  TaskStatus taskStatus
+                                  ) {
+        List<OrderRequest> order = null;
+        Pageable pageable = new PageRequest(page,size);
+        List<Task> tasks = taskService.getSomeStatusTasks(taskStatus, page,size, order);
+        return getListBaseResponse(pageable, tasks);
+    }
+
+    @GetMapping("/taskType/list")
+    @ApiOperation(value = "分页获取：根据【任务类型】筛选的任务")
+    public BaseResponse getSomeList(@RequestParam(required = false, defaultValue = "0") int page,
+                                  @RequestParam(required = false, defaultValue = Integer_MAX_VALUE) int size,
+                                  TaskType taskType
+                                  ) {
+        List<OrderRequest> order = null;
+        Pageable pageable = new PageRequest(page,size);
+        List<Task> tasks = taskService.getSomeTypeTasks(taskType, page,size, order);
+        return getListBaseResponse(pageable, tasks);
+    }
+
+    @GetMapping("/taskPriority/list")
+    @ApiOperation(value = "分页获取：根据【任务重要性】筛选的任务")
+    public BaseResponse getSomeList(@RequestParam(required = false, defaultValue = "0") int page,
+                                  @RequestParam(required = false, defaultValue = Integer_MAX_VALUE) int size,
+                                  TaskPriority taskPriority
+                                  ) {
+        List<OrderRequest> order = null;
+        Pageable pageable = new PageRequest(page,size);
+        List<Task> tasks = taskService.getSomePriorityTasks(taskPriority, page,size, order);
+        return getListBaseResponse(pageable, tasks);
     }
 
     /**
@@ -201,5 +243,14 @@ public class TaskController extends BaseController {
             accounts.add(accountRepository.findById(eeTask.getTaskPersonInChargeID()));
         }
         return accounts;
+    }
+
+    private BaseResponse getListBaseResponse(Pageable pageable, List<Task> tasks) {
+        List<Pair<Task,List<Optional<Account>>>> result = new ArrayList<>();
+        for (Task task:tasks){
+            List<Optional<Account>> accounts = getChargeListViaTask(task);
+            result.add(new Pair<>(task,accounts));
+        }
+        return new SuccessResponse<>(PageResponse.build(result, pageable));
     }
 }
